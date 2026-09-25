@@ -17,7 +17,7 @@ export default function Footer() {
       <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-4">
           <div>
-            <a href="#" className="flex items-center gap-2">
+            <Link href="#" className="flex items-center gap-2">
               <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-600 text-white">
                 <FaGraduationCap size={21} />
               </div>
@@ -25,7 +25,7 @@ export default function Footer() {
               <span className="text-xl font-bold tracking-tight text-gray-900 dark:text-white">
                 Medi<span className="text-blue-600">Queue</span>
               </span>
-            </a>
+            </Link>
 
             <p className="mt-4 max-w-sm text-sm leading-6 text-gray-500 dark:text-gray-400">
               Find the right tutor, manage your learning sessions, and make your

@@ -1,7 +1,8 @@
+
 "use client";
 
-import Link from "next/link";
 import { useEffect, useState } from "react";
+import Link from "next/link";
 import {
   FaGraduationCap,
   FaBars,
@@ -11,47 +12,52 @@ import {
 } from "react-icons/fa6";
 
 export default function Navbar() {
+  const [darkMode, setDarkMode] = useState(false);
 
-  const [darkMode, setDarkMode] = useState(() => {
-    if (typeof window !== "undefined") {
-      return localStorage.getItem("theme") === "dark";
-    }
-    return false;
-  });
   const [menuOpen, setMenuOpen] = useState(false);
 
  
   useEffect(() => {
-    if (darkMode) {
-      document.documentElement.classList.add("dark");
-      localStorage.setItem("theme", "dark");
-    } else {
-      document.documentElement.classList.remove("dark");
-      localStorage.setItem("theme", "light");
-    }
-  }, [darkMode]);
+    const savedTheme = localStorage.getItem("theme");
 
-  // ================= Toggle Theme =================
+    if (savedTheme === "dark") {
+      setDarkMode(true);
+      document.documentElement.classList.add("dark");
+    } else {
+      setDarkMode(false);
+      document.documentElement.classList.remove("dark");
+    }
+  }, []);
+
   const handleThemeToggle = () => {
-    setDarkMode((prev) => !prev);
+    setDarkMode((prev) => {
+      const newMode = !prev;
+
+      if (newMode) {
+        document.documentElement.classList.add("dark");
+        localStorage.setItem("theme", "dark");
+      } else {
+        document.documentElement.classList.remove("dark");
+        localStorage.setItem("theme", "light");
+      }
+
+      return newMode;
+    });
   };
 
-  // ================= Close Menu =================
   const closeMenu = () => {
     setMenuOpen(false);
   };
 
   return (
-    <nav className="w-full border-b border-gray-200 bg-white dark:border-gray-800 dark:bg-gray-950">
-
-      {/* ================= Main Navbar ================= */}
-      <div className="mx-auto flex h-18 max-w-full items-center justify-between px-4 sm:px-6 lg:px-8">
-
-        {/* ================= Logo ================= */}
-        <a
-          href="#"
-          className="flex items-center gap-2"
+    <nav className="sticky top-0 z-50 border-b border-gray-200 bg-white dark:border-gray-800 dark:bg-gray-950">
+      <div className="mx-auto flex h-20  items-center justify-between px-4">
+        
+        {/* Logo */}
+        <Link
+          href="/"
           onClick={closeMenu}
+          className="flex shrink-0 items-center gap-2"
         >
           <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-600 text-white">
             <FaGraduationCap size={21} />
@@ -60,59 +66,52 @@ export default function Navbar() {
           <span className="text-xl font-bold tracking-tight text-gray-900 dark:text-white sm:text-2xl">
             Medi<span className="text-blue-600">Queue</span>
           </span>
-        </a>
+        </Link>
 
-
-        {/* ================= Desktop Navigation ================= */}
-        <div className="hidden items-center gap-5 lg:flex">
-
-          <Link
-            href="/"
-            className="text-sm font-semibold text-gray-600 hover:text-blue-600 dark:text-gray-300"
-          >
+        {/* Desktop Nav */}
+        <div className="hidden items-center gap-7 md:flex">
+          <Link href="/" className="text-gray-700 dark:text-gray-300">
             Home
           </Link>
 
           <Link
-            href="tutors"
-            className="text-sm font-medium text-gray-600 transition hover:text-blue-600 dark:text-gray-300"
+            href="/tutors"
+            className="text-gray-700 dark:text-gray-300"
           >
             Tutors
           </Link>
 
           <Link
-            href="add-tutor"
-            className="text-sm font-medium text-gray-600 transition hover:text-blue-600 dark:text-gray-300"
+            href="/add-tutor"
+            className="text-gray-700 dark:text-gray-300"
           >
             Add Tutor
           </Link>
 
           <Link
-            href="my-tutors"
-            className="text-sm font-medium text-gray-600 transition hover:text-blue-600 dark:text-gray-300"
+            href="/my-tutors"
+            className="text-gray-700 dark:text-gray-300"
           >
             My Tutors
           </Link>
 
           <Link
-            href="my-sessions"
-            className="text-sm font-medium text-gray-600 transition hover:text-blue-600 dark:text-gray-300"
+            href="/my-sessions"
+            className="text-gray-700 dark:text-gray-300"
           >
             My Sessions
           </Link>
-
         </div>
 
-
-        {/* ================= Desktop Right Side ================= */}
-        <div className="hidden items-center gap-3 lg:flex">
-
+        {/* Right Side */}
+        <div className="flex items-center gap-3">
+          
           {/* Theme Toggle */}
           <button
             type="button"
             onClick={handleThemeToggle}
-            aria-label="Toggle dark and light mode"
-            className="flex h-10 w-10 items-center justify-center rounded-full border border-gray-200 bg-gray-50 text-gray-700 transition hover:border-blue-300 hover:bg-blue-50 hover:text-blue-600 dark:border-gray-700 dark:bg-gray-900 dark:text-yellow-400 dark:hover:bg-gray-800"
+            aria-label="Toggle dark mode"
+            className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-gray-200 bg-gray-50 text-gray-700 transition hover:border-blue-300 hover:bg-blue-50 hover:text-blue-600 dark:border-gray-700 dark:bg-gray-900 dark:text-yellow-400 dark:hover:bg-gray-800"
           >
             {darkMode ? (
               <FaSun size={17} />
@@ -121,234 +120,80 @@ export default function Navbar() {
             )}
           </button>
 
+          {/* Desktop Auth */}
+          <div className="hidden items-center gap-2 md:flex">
+            <Link
+              href="/login"
+              className="rounded-lg px-4 py-2 text-sm font-semibold text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800"
+            >
+              Login
+            </Link>
 
-          {/* Login */}
-          <Link
-            href="login"
-            className="rounded-lg px-4 py-2 text-sm font-semibold text-gray-700 transition hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-800"
-          >
-            Login
-          </Link>
+            <Link
+              href="/register"
+              className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-700"
+            >
+              Register
+            </Link>
+          </div>
 
-
-          {/* Register */}
-          <Link
-            href="register"
-            className="rounded-lg bg-blue-600 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-blue-700"
-          >
-            Register
-          </Link>
-
-        </div>
-
-
-        {/* ================= Tablet Right Side ================= */}
-        <div className="hidden items-center gap-2 sm:flex lg:hidden">
-
-          {/* Theme Toggle */}
-          <button
-            type="button"
-            onClick={handleThemeToggle}
-            aria-label="Toggle dark and light mode"
-            className="flex h-9 w-9 items-center justify-center rounded-full border border-gray-200 bg-gray-50 text-gray-700 transition hover:bg-blue-50 hover:text-blue-600 dark:border-gray-700 dark:bg-gray-900 dark:text-yellow-400"
-          >
-            {darkMode ? (
-              <FaSun size={15} />
-            ) : (
-              <FaMoon size={15} />
-            )}
-          </button>
-
-
-          {/* Login */}
-          <a
-            href="#"
-            className="rounded-lg px-3 py-2 text-sm font-semibold text-gray-700 transition hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-800"
-          >
-            Login
-          </a>
-
-
-          {/* Register */}
-          <a
-            href="#"
-            className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-blue-700"
-          >
-            Register
-          </a>
-
-
-          {/* Menu */}
+          {/* Mobile Menu Button */}
           <button
             type="button"
             onClick={() => setMenuOpen(!menuOpen)}
-            aria-label="Open menu"
-            className="flex h-9 w-9 items-center justify-center rounded-lg text-gray-700 transition hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-800"
-          >
-            {menuOpen ? <FaXmark size={19} /> : <FaBars size={19} />}
-          </button>
-
-        </div>
-
-
-        {/* ================= Mobile Right Side ================= */}
-        <div className="flex items-center gap-2 sm:hidden">
-
-          {/* Theme Toggle */}
-          <button
-            type="button"
-            onClick={handleThemeToggle}
-            aria-label="Toggle dark and light mode"
-            className="flex h-9 w-9 items-center justify-center rounded-full border border-gray-200 bg-gray-50 text-gray-700 transition hover:bg-blue-50 hover:text-blue-600 dark:border-gray-700 dark:bg-gray-900 dark:text-yellow-400"
-          >
-            {darkMode ? (
-              <FaSun size={15} />
-            ) : (
-              <FaMoon size={15} />
-            )}
-          </button>
-
-
-          {/* Mobile Menu */}
-          <button
-            type="button"
-            onClick={() => setMenuOpen(!menuOpen)}
-            aria-label="Open menu"
-            className="flex h-9 w-9 items-center justify-center rounded-lg text-gray-700 transition hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-800"
+            className="flex h-10 w-10 items-center justify-center rounded-lg border border-gray-200 text-gray-700 dark:border-gray-700 dark:text-gray-300 md:hidden"
+            aria-label="Toggle menu"
           >
             {menuOpen ? <FaXmark size={20} /> : <FaBars size={20} />}
           </button>
-
         </div>
-
       </div>
 
-
-      {/* ================= Tablet Menu ================= */}
+      {/* Mobile Menu */}
       {menuOpen && (
-        <div className="hidden border-t border-gray-200 bg-white dark:border-gray-800 dark:bg-gray-950 sm:block lg:hidden">
-
-          <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-center gap-2 px-6 py-4">
-
-            <a
-              href="#"
-              onClick={closeMenu}
-              className="rounded-lg bg-blue-50 px-4 py-2.5 text-sm font-semibold text-blue-600 dark:bg-blue-950"
-            >
-              Home
-            </a>
-
-            <a
-              href="#"
-              onClick={closeMenu}
-              className="rounded-lg px-4 py-2.5 text-sm font-medium text-gray-700 transition hover:bg-gray-100 hover:text-blue-600 dark:text-gray-300 dark:hover:bg-gray-800"
-            >
-              Tutors
-            </a>
-
-            <a
-              href="#"
-              onClick={closeMenu}
-              className="rounded-lg px-4 py-2.5 text-sm font-medium text-gray-700 transition hover:bg-gray-100 hover:text-blue-600 dark:text-gray-300 dark:hover:bg-gray-800"
-            >
-              Add Tutor
-            </a>
-
-            <a
-              href="#"
-              onClick={closeMenu}
-              className="rounded-lg px-4 py-2.5 text-sm font-medium text-gray-700 transition hover:bg-gray-100 hover:text-blue-600 dark:text-gray-300 dark:hover:bg-gray-800"
-            >
-              My Tutors
-            </a>
-
-            <a
-              href="#"
-              onClick={closeMenu}
-              className="rounded-lg px-4 py-2.5 text-sm font-medium text-gray-700 transition hover:bg-gray-100 hover:text-blue-600 dark:text-gray-300 dark:hover:bg-gray-800"
-            >
-              My Sessions
-            </a>
-
-          </div>
-
-        </div>
-      )}
-
-
-      {/* ================= Mobile Menu ================= */}
-      {menuOpen && (
-        <div className="border-t border-gray-200 bg-white px-4 py-4 dark:border-gray-800 dark:bg-gray-950 sm:hidden">
-
-          <div className="mx-auto flex max-w-7xl flex-col gap-1">
-
-            <Link
-              href="/"
-              onClick={closeMenu}
-              className="rounded-lg bg-blue-50 px-4 py-3 text-sm font-semibold text-blue-600 dark:bg-blue-950"
-            >
+        <div className="border-t border-gray-200 bg-white px-4 py-5 dark:border-gray-800 dark:bg-gray-950 md:hidden">
+          <div className="flex flex-col gap-4">
+            <Link href="/" onClick={closeMenu}>
               Home
             </Link>
 
-            <Link
-              href="tutors"
-              onClick={closeMenu}
-              className="rounded-lg px-4 py-3 text-sm font-medium text-gray-700 transition hover:bg-gray-100 hover:text-blue-600 dark:text-gray-300 dark:hover:bg-gray-800"
-            >
+            <Link href="/tutors" onClick={closeMenu}>
               Tutors
             </Link>
 
-            <Link
-              href="add-tutor"
-              onClick={closeMenu}
-              className="rounded-lg px-4 py-3 text-sm font-medium text-gray-700 transition hover:bg-gray-100 hover:text-blue-600 dark:text-gray-300 dark:hover:bg-gray-800"
-            >
+            <Link href="/add-tutor" onClick={closeMenu}>
               Add Tutor
             </Link>
 
-            <Link
-              href="my-tutors"
-              onClick={closeMenu}
-              className="rounded-lg px-4 py-3 text-sm font-medium text-gray-700 transition hover:bg-gray-100 hover:text-blue-600 dark:text-gray-300 dark:hover:bg-gray-800"
-            >
+            <Link href="/my-tutors" onClick={closeMenu}>
               My Tutors
             </Link>
 
-            <Link
-              href="my-sessions"
-              onClick={closeMenu}
-              className="rounded-lg px-4 py-3 text-sm font-medium text-gray-700 transition hover:bg-gray-100 hover:text-blue-600 dark:text-gray-300 dark:hover:bg-gray-800"
-            >
+            <Link href="/my-sessions" onClick={closeMenu}>
               My Sessions
             </Link>
 
-
-            {/* Mobile Auth */}
-            <div className="mt-2 border-t border-gray-200 pt-3 dark:border-gray-800">
-
+            <div className="flex gap-2 border-t border-gray-200 pt-4 dark:border-gray-800">
               <Link
-                href="login"
+                href="/login"
                 onClick={closeMenu}
-                className="block rounded-lg px-4 py-3 text-sm font-semibold text-gray-700 transition hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-800"
+                className="flex-1 rounded-lg border border-gray-200 py-2 text-center dark:border-gray-700"
               >
                 Login
               </Link>
 
               <Link
-                href="register"
+                href="/register"
                 onClick={closeMenu}
-                className="mt-1 block rounded-lg bg-blue-600 px-4 py-3 text-center text-sm font-semibold text-white transition hover:bg-blue-700"
+                className="flex-1 rounded-lg bg-blue-600 py-2 text-center text-white"
               >
                 Register
               </Link>
-
             </div>
-
           </div>
-
         </div>
       )}
-
     </nav>
   );
 }
+
