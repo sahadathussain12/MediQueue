@@ -1,9 +1,13 @@
+import Benner from "@/components/Benner";
 import Image from "next/image";
 
 export default function Home() {
   return (
   <div>
-    this is Home page 
+    <main className="mt-5">
+
+    <Benner/>
+    </main>
   </div>
   );
 }

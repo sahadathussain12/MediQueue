@@ -1,6 +1,7 @@
 
 "use client";
 
+import Link from "next/link";
 import {
   FaGraduationCap,
   FaFacebookF,
@@ -40,29 +41,29 @@ export default function Footer() {
             {/* Social Links */}
             <div className="mt-5 flex items-center gap-3">
 
-              <a
-                href="#"
+              <Link
+                href="https://www.facebook.com/share/1PkVoW89sX/"
                 aria-label="Facebook"
                 className="flex h-9 w-9 items-center justify-center rounded-full border border-gray-200 text-gray-600 transition hover:border-blue-600 hover:bg-blue-600 hover:text-white dark:border-gray-700 dark:text-gray-300"
               >
                 <FaFacebookF size={15} />
-              </a>
+              </Link>
 
-              <a
-                href="#"
+              <Link
+                href="www.linkedin.com/in/sahadat-hussain12"
                 aria-label="LinkedIn"
                 className="flex h-9 w-9 items-center justify-center rounded-full border border-gray-200 text-gray-600 transition hover:border-blue-600 hover:bg-blue-600 hover:text-white dark:border-gray-700 dark:text-gray-300"
               >
                 <FaLinkedinIn size={15} />
-              </a>
+              </Link>
 
-              <a
-                href="#"
+              <Link
+                href="https://github.com/sahadathussain12"
                 aria-label="GitHub"
                 className="flex h-9 w-9 items-center justify-center rounded-full border border-gray-200 text-gray-600 transition hover:border-gray-900 hover:bg-gray-900 hover:text-white dark:border-gray-700 dark:text-gray-300"
               >
                 <FaGithub size={15} />
-              </a>
+              </Link>
 
             </div>
           </div>

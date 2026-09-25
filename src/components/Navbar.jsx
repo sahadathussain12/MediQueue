@@ -68,7 +68,7 @@ export default function Navbar() {
 
           <Link
             href="/"
-            className="text-sm font-semibold text-gray-600 hover:text-blue-600"
+            className="text-sm font-semibold text-gray-600 hover:text-blue-600 dark:text-gray-300"
           >
             Home
           </Link>
@@ -123,21 +123,21 @@ export default function Navbar() {
 
 
           {/* Login */}
-          <a
-            href="#"
+          <Link
+            href="login"
             className="rounded-lg px-4 py-2 text-sm font-semibold text-gray-700 transition hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-800"
           >
             Login
-          </a>
+          </Link>
 
 
           {/* Register */}
-          <a
-            href="#"
+          <Link
+            href="register"
             className="rounded-lg bg-blue-600 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-blue-700"
           >
             Register
-          </a>
+          </Link>
 
         </div>
 
@@ -282,65 +282,65 @@ export default function Navbar() {
 
           <div className="mx-auto flex max-w-7xl flex-col gap-1">
 
-            <a
-              href="#"
+            <Link
+              href="/"
               onClick={closeMenu}
               className="rounded-lg bg-blue-50 px-4 py-3 text-sm font-semibold text-blue-600 dark:bg-blue-950"
             >
               Home
-            </a>
+            </Link>
 
-            <a
-              href="#"
+            <Link
+              href="tutors"
               onClick={closeMenu}
               className="rounded-lg px-4 py-3 text-sm font-medium text-gray-700 transition hover:bg-gray-100 hover:text-blue-600 dark:text-gray-300 dark:hover:bg-gray-800"
             >
               Tutors
-            </a>
+            </Link>
 
-            <a
-              href="#"
+            <Link
+              href="add-tutor"
               onClick={closeMenu}
               className="rounded-lg px-4 py-3 text-sm font-medium text-gray-700 transition hover:bg-gray-100 hover:text-blue-600 dark:text-gray-300 dark:hover:bg-gray-800"
             >
               Add Tutor
-            </a>
+            </Link>
 
-            <a
-              href="#"
+            <Link
+              href="my-tutors"
               onClick={closeMenu}
               className="rounded-lg px-4 py-3 text-sm font-medium text-gray-700 transition hover:bg-gray-100 hover:text-blue-600 dark:text-gray-300 dark:hover:bg-gray-800"
             >
               My Tutors
-            </a>
+            </Link>
 
-            <a
-              href="#"
+            <Link
+              href="my-sessions"
               onClick={closeMenu}
               className="rounded-lg px-4 py-3 text-sm font-medium text-gray-700 transition hover:bg-gray-100 hover:text-blue-600 dark:text-gray-300 dark:hover:bg-gray-800"
             >
               My Sessions
-            </a>
+            </Link>
 
 
             {/* Mobile Auth */}
             <div className="mt-2 border-t border-gray-200 pt-3 dark:border-gray-800">
 
-              <a
-                href="#"
+              <Link
+                href="login"
                 onClick={closeMenu}
                 className="block rounded-lg px-4 py-3 text-sm font-semibold text-gray-700 transition hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-800"
               >
                 Login
-              </a>
+              </Link>
 
-              <a
-                href="#"
+              <Link
+                href="register"
                 onClick={closeMenu}
                 className="mt-1 block rounded-lg bg-blue-600 px-4 py-3 text-center text-sm font-semibold text-white transition hover:bg-blue-700"
               >
                 Register
-              </a>
+              </Link>
 
             </div>
 
