@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 const TutorsPage = async () => {
   const res = await fetch("http://localhost:5000/alltutors");
 
@@ -108,12 +110,13 @@ const TutorsPage = async () => {
                     </p>
                   </div>
 
+                  <Link href={`/tutors/${item._id}`}>
                   <button
                     type="button"
                     className="rounded-xl bg-blue-600 px-4 py-2.5 font-semibold text-white transition hover:bg-blue-700"
                   >
                     View Detels
-                  </button>
+                  </button></Link>
                 </div>
               </div>
             </div>
