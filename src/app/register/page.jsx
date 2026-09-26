@@ -15,16 +15,51 @@ import {
   TextField,
 } from "@heroui/react";
 
+import { toast } from "react-toastify";
+import { authClient } from "@/lib/auth-clien";
+import { redirect } from "next/navigation";
+
 const RegisterPage = () => {
   const [showPassword, setShowPassword] = useState(false);
 
-  const handleRegester = (e) => {
+  const handleRegester = async (e) => {
     e.preventDefault();
 
     const formData = new FormData(e.currentTarget);
-    const data = Object.fromEntries(formData.entries());
+    const user = Object.fromEntries(formData.entries());
 
-    console.log(data, "data");
+
+
+const {data,error}= await authClient.signUp.email({
+  name:user?.name,
+  email:user?.email,
+  image:user?.image,
+  password:user?.password
+})
+
+console.log(data,"data",error);
+
+    if (error) {
+      toast.error(error.message || "Sign up failed");
+      return;
+    }
+
+    toast.success("Sign up successful!");
+    redirect('/')
+  };
+   const handleGoogleSignUp = async () => {
+    const { data, error } = await authClient.signIn.social({
+      provider: "google",
+      callbackURL: "/",
+    });
+
+    console.log("Google data:", data);
+    console.log("Google error:", error);
+
+    if (error) {
+      toast.error(error.message || "Google sign up failed");
+    }
+    toast.success("Google sign up Successful")
   };
 
   return (
@@ -51,10 +86,7 @@ const RegisterPage = () => {
             <TextField name="name" className="w-full">
               <Label>Name</Label>
 
-              <Input
-                type="text"
-                placeholder="Enter your name"
-              />
+              <Input type="text" placeholder="Enter your name" />
 
               <FieldError />
             </TextField>
@@ -63,22 +95,16 @@ const RegisterPage = () => {
             <TextField name="email" className="w-full">
               <Label>Email</Label>
 
-              <Input
-                type="email"
-                placeholder="john@example.com"
-              />
+              <Input type="email" placeholder="john@example.com" />
 
               <FieldError />
             </TextField>
 
             {/* Photo URL */}
-            <TextField name="imageUrl" className="w-full">
+            <TextField name="image" className="w-full">
               <Label>Photo URL</Label>
 
-              <Input
-                type="url"
-                placeholder="Enter your photo URL"
-              />
+              <Input type="url" placeholder="Enter your photo URL" />
 
               <FieldError />
             </TextField>
@@ -118,11 +144,7 @@ const RegisterPage = () => {
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  aria-label={
-                    showPassword
-                      ? "Hide password"
-                      : "Show password"
-                  }
+                  aria-label={showPassword ? "Hide password" : "Show password"}
                   className="absolute right-3 text-gray-500 hover:text-gray-700 focus:outline-none dark:text-gray-400 dark:hover:text-gray-200"
                 >
                   {showPassword ? (
@@ -154,15 +176,14 @@ const RegisterPage = () => {
           <div className="my-5 flex items-center gap-3">
             <div className="h-px flex-1 bg-gray-200 dark:bg-gray-800" />
 
-            <span className="text-xs font-medium text-gray-500">
-              OR
-            </span>
+            <span className="text-xs font-medium text-gray-500">OR</span>
 
             <div className="h-px flex-1 bg-gray-200 dark:bg-gray-800" />
           </div>
 
           {/* Google Button */}
           <Button
+          onClick={handleGoogleSignUp}
             type="button"
             variant="secondary"
             className="h-11 w-full font-semibold"
@@ -188,4 +209,3 @@ const RegisterPage = () => {
 };
 
 export default RegisterPage;
-
