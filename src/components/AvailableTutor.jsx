@@ -1,9 +1,12 @@
+
+
 const AvailableTutor = async () => {
   const res = await fetch("http://localhost:5000/tutors");
 
   const tutor = await res.json();
 
   return (
+  
     <section className="bg-gray-50 px-4 py-12 dark:bg-gray-950">
       <div className="mx-auto max-w-7xl">
         {/* Heading */}
@@ -67,7 +70,7 @@ const AvailableTutor = async () => {
                     type="button"
                     className="rounded-xl bg-blue-600 w-full px-4 py-2.5 font-semibold text-white transition hover:bg-blue-700"
                   >
-                    View Profile
+                    View Detels
                   </button>
                 </div>
               </div>
