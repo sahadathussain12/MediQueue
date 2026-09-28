@@ -1,7 +1,10 @@
+
 "use client";
 
 import Link from "next/link";
 import { useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+
 import { FcGoogle } from "react-icons/fc";
 import { FaEye, FaEyeSlash } from "react-icons/fa6";
 
@@ -14,28 +17,34 @@ import {
   Label,
   TextField,
 } from "@heroui/react";
+
 import { authClient } from "@/lib/auth-clien";
 import { toast } from "react-toastify";
-import { redirect } from "next/navigation";
 
 export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
+
+  const router = useRouter();
+  const searchParams = useSearchParams();
+
+  // User কোন page থেকে login করতে এসেছে
+  const redirectUrl = searchParams.get("redirect") || "/";
 
   const onSubmit = async (e) => {
     e.preventDefault();
 
     const formData = new FormData(e.currentTarget);
-    console.log(FormData, "Formtdata");
     const user = Object.fromEntries(formData.entries());
+
     console.log(user, "user");
 
     const { data, error } = await authClient.signIn.email({
       email: user?.email,
-
       password: user?.password,
     });
 
-    console.log(data, "data", error);
+    console.log(data, "data");
+    console.log(error, "error");
 
     if (error) {
       toast.error(error.message);
@@ -43,23 +52,30 @@ export default function LoginPage() {
     }
 
     toast.success("Sign In successful!");
-    redirect("/");
+
+    // Login successful হলে আগের requested page-এ যাবে
+    router.push(redirectUrl);
   };
 
-  const handleGoogleSignIn= async () => {
+  const handleGoogleSignIn = async () => {
     const { data, error } = await authClient.signIn.social({
       provider: "google",
-      callbackURL: "/",
+
+      // Google login successful হলে redirect URL-এ যাবে
+      callbackURL: redirectUrl,
     });
 
     console.log("Google data:", data);
     console.log("Google error:", error);
 
     if (error) {
-      toast.error(error.message || "Google sign up failed");
+      toast.error(error.message || "Google sign in failed");
+      return;
     }
-    toast.success("Google sign up Successful");
+
+    toast.success("Google sign in successful!");
   };
+
   return (
     <main className="flex min-h-[calc(100vh-80px)] items-center justify-center bg-gray-50 px-4 py-10 dark:bg-gray-950">
       <div className="w-full max-w-md">
@@ -81,7 +97,10 @@ export default function LoginPage() {
             <TextField name="email" className="w-full">
               <Label>Email</Label>
 
-              <Input type="email" placeholder="john@example.com" />
+              <Input
+                type="email"
+                placeholder="john@example.com"
+              />
 
               <FieldError />
             </TextField>
@@ -89,12 +108,11 @@ export default function LoginPage() {
             {/* Password */}
             <TextField
               name="password"
-              type={showPassword ? "text" : "password"}
               className="w-full"
             >
               <Label>Password</Label>
 
-              <div className="relative flex items-center w-full">
+              <div className="relative flex w-full items-center">
                 <Input
                   type={showPassword ? "text" : "password"}
                   placeholder="Enter your password"
@@ -104,7 +122,11 @@ export default function LoginPage() {
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  aria-label={showPassword ? "Hide password" : "Show password"}
+                  aria-label={
+                    showPassword
+                      ? "Hide password"
+                      : "Show password"
+                  }
                   className="absolute right-3 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 focus:outline-none"
                 >
                   {showPassword ? (
@@ -115,7 +137,9 @@ export default function LoginPage() {
                 </button>
               </div>
 
-              <Description>Enter your MediQueue account password.</Description>
+              <Description>
+                Enter your MediQueue account password.
+              </Description>
 
               <FieldError />
             </TextField>
@@ -134,25 +158,29 @@ export default function LoginPage() {
           <div className="my-5 flex items-center gap-3">
             <div className="h-px flex-1 bg-gray-200 dark:bg-gray-800" />
 
-            <span className="text-xs font-medium text-gray-500">OR</span>
+            <span className="text-xs font-medium text-gray-500">
+              OR
+            </span>
 
             <div className="h-px flex-1 bg-gray-200 dark:bg-gray-800" />
           </div>
 
           {/* Google Button */}
           <Button
-          onClick={handleGoogleSignIn}
+            onClick={handleGoogleSignIn}
             type="button"
             variant="secondary"
             className="h-11 w-full font-semibold"
           >
             <FcGoogle className="text-xl" />
+
             Continue with Google
           </Button>
 
           {/* Register Link */}
           <p className="mt-6 text-center text-sm text-gray-600 dark:text-gray-400">
             Don’t have an account?{" "}
+
             <Link
               href="/register"
               className="font-semibold text-blue-600 hover:underline dark:text-blue-400"
@@ -165,3 +193,4 @@ export default function LoginPage() {
     </main>
   );
 }
+

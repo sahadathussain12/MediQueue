@@ -1,11 +1,23 @@
 import Link from "next/link";
+import { headers } from "next/headers";
+import { auth } from "@/lib/auth";
 
 const TutorsPage = async () => {
-  const res = await fetch("http://localhost:5000/alltutors");
+  // Check logged-in user
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+
+  // Fetch tutors
+  const res = await fetch("http://localhost:5000/alltutors", {
+    cache: "no-store",
+  });
+
+  if (!res.ok) {
+    throw new Error("Failed to fetch tutors");
+  }
 
   const tutor = await res.json();
-
-  console.log(tutor, tutor.length,'tuotr');
 
   return (
     <section className="min-h-screen bg-gray-50 px-4 py-12 dark:bg-gray-950">
@@ -97,6 +109,7 @@ const TutorsPage = async () => {
 
                 {/* Bottom */}
                 <div className="mt-5 flex items-center justify-between border-t border-gray-200 pt-4 dark:border-gray-700">
+                  {/* Price */}
                   <div>
                     <p className="text-xs text-gray-500 dark:text-gray-400">
                       Hourly Fee
@@ -104,19 +117,24 @@ const TutorsPage = async () => {
 
                     <p className="text-xl font-bold text-blue-600 dark:text-blue-400">
                       ${item.hourlyFee}
+
                       <span className="text-sm font-normal text-gray-500">
                         /hour
                       </span>
                     </p>
                   </div>
 
-                  <Link href={`/tutors/${item._id}`}>
-                  <button
-                    type="button"
+                  {/* View Details */}
+                  <Link
+                    href={
+                      session
+                        ? `/tutors/${item._id}`
+                        : `/login?redirect=/tutors/${item._id}`
+                    }
                     className="rounded-xl bg-blue-600 px-4 py-2.5 font-semibold text-white transition hover:bg-blue-700"
                   >
-                    View Detels
-                  </button></Link>
+                   Book Session
+                  </Link>
                 </div>
               </div>
             </div>

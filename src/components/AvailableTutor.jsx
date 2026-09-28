@@ -1,12 +1,23 @@
-
+import { auth } from "@/lib/auth";
+import { headers } from "next/headers";
+import Link from "next/link";
 
 const AvailableTutor = async () => {
-  const res = await fetch("http://localhost:5000/tutors");
+  // Check current user session
+  const session = await auth.api.getSession({
+    headers: await headers(), // you need to pass the headers object.
+  });
+
+  const user=session?.user
+
+
+  const res = await fetch("http://localhost:5000/tutors", {
+    cache: "no-store",
+  });
 
   const tutor = await res.json();
 
   return (
-  
     <section className="bg-gray-50 px-4 py-12 dark:bg-gray-950">
       <div className="mx-auto max-w-7xl">
         {/* Heading */}
@@ -63,15 +74,17 @@ const AvailableTutor = async () => {
                 </div>
 
                 {/* Bottom */}
-                <div className="mt-5 flex items-center justify-between border-t border-gray-200 pt-4 dark:border-gray-700">
-                 
-
-                  <button
-                    type="button"
-                    className="rounded-xl bg-blue-600 w-full px-4 py-2.5 font-semibold text-white transition hover:bg-blue-700"
+                <div className="mt-5 border-t border-gray-200 pt-4 dark:border-gray-700">
+                  <Link
+                    href={
+                      user
+                        ? `/tutors/${item._id}`
+                        : `/login?redirect=/tutors/${item._id}`
+                    }
+                    className="block w-full rounded-xl bg-blue-600 px-4 py-2.5 text-center font-semibold text-white transition hover:bg-blue-700"
                   >
-                    View Detels
-                  </button>
+                    View Details
+                  </Link>
                 </div>
               </div>
             </div>

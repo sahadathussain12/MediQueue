@@ -9,6 +9,8 @@ import {
   FaSun,
   FaMoon,
   FaXmark,
+  FaUser,
+  FaRightFromBracket,
 } from "react-icons/fa6";
 import { authClient } from "@/lib/auth-clien";
 import { Avatar } from "@heroui/react";
@@ -18,6 +20,7 @@ import { toast } from "react-toastify";
 export default function Navbar() {
   const [darkMode, setDarkMode] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [profileOpen, setProfileOpen] = useState(false);
 
   const router = useRouter();
 
@@ -27,9 +30,7 @@ export default function Navbar() {
   const { data: session } = authClient.useSession();
   const user = session?.user;
 
-  // =========================
-  // Theme
-  // =========================
+
   useEffect(() => {
     const savedTheme = localStorage.getItem("theme");
 
@@ -63,11 +64,10 @@ export default function Navbar() {
   // =========================
   const closeMenu = () => {
     setMenuOpen(false);
+    setProfileOpen(false);
   };
 
-  // =========================
-  // Logout
-  // =========================
+
   const handleLogout = async () => {
     const { error } = await authClient.signOut();
 
@@ -79,14 +79,13 @@ export default function Navbar() {
     toast.success("Logged out successfully!");
 
     setMenuOpen(false);
+    setProfileOpen(false);
 
     router.push("/");
     router.refresh();
   };
 
-  // =========================
-  // User Initial
-  // =========================
+
   const userInitial =
     user?.name?.charAt(0)?.toUpperCase() || "U";
 
@@ -94,9 +93,7 @@ export default function Navbar() {
     <nav className="sticky top-0 z-50 border-b border-gray-200 bg-white dark:border-gray-800 dark:bg-gray-950">
       <div className="mx-auto flex h-20 items-center justify-between px-4">
 
-        {/* =========================
-            Logo
-        ========================= */}
+        {/* Logo */}
         <Link
           href="/"
           onClick={closeMenu}
@@ -111,12 +108,9 @@ export default function Navbar() {
           </span>
         </Link>
 
-        {/* =========================
-            Desktop Navigation
-        ========================= */}
+        {/* Desktop Navigation */}
         <div className="hidden items-center gap-4 lg:flex xl:gap-7">
 
-          {/* Home */}
           <Link
             href="/"
             className="text-sm font-medium text-gray-700 transition hover:text-blue-600 dark:text-gray-300 dark:hover:text-blue-400 xl:text-base"
@@ -124,7 +118,6 @@ export default function Navbar() {
             Home
           </Link>
 
-          {/* Tutors */}
           <Link
             href="/tutors"
             className="text-sm font-medium text-gray-700 transition hover:text-blue-600 dark:text-gray-300 dark:hover:text-blue-400 xl:text-base"
@@ -132,7 +125,6 @@ export default function Navbar() {
             Tutors
           </Link>
 
-          {/* Login Required Links */}
           {user && (
             <>
               <Link
@@ -153,23 +145,21 @@ export default function Navbar() {
                 href="/my-sessions"
                 className="text-sm font-medium text-gray-700 transition hover:text-blue-600 dark:text-gray-300 dark:hover:text-blue-400 xl:text-base"
               >
-                My Sessions
+                My Booked Sessions
               </Link>
             </>
           )}
         </div>
 
-        {/* =========================
-            Right Side
-        ========================= */}
-        <div className="flex items-center justify-center gap-2 sm:gap-3">
+        {/* Right Side */}
+        <div className="flex items-center gap-2 sm:gap-3">
 
           {/* Theme Toggle */}
           <button
             type="button"
             onClick={handleThemeToggle}
             aria-label="Toggle dark mode"
-            className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-gray-200 bg-gray-50 text-gray-700 transition hover:border-blue-300 hover:bg-blue-50 hover:text-blue-600 dark:border-gray-700 dark:bg-gray-900 dark:text-yellow-400 dark:hover:bg-gray-800"
+            className="flex h-10 w-10 items-center justify-center rounded-full border border-gray-200 bg-gray-50 text-gray-700 transition hover:border-blue-300 hover:bg-blue-50 hover:text-blue-600 dark:border-gray-700 dark:bg-gray-900 dark:text-yellow-400 dark:hover:bg-gray-800"
           >
             {darkMode ? (
               <FaSun size={17} />
@@ -178,71 +168,92 @@ export default function Navbar() {
             )}
           </button>
 
-          {/* =========================
-              Desktop Auth
-          ========================= */}
-          <div className="hidden items-center justify-center lg:flex">
+          {/* Desktop Auth */}
+          <div className="hidden lg:flex">
 
             {user ? (
-              <div className="flex items-center justify-center gap-2 xl:gap-3">
+              <div className="relative">
 
-                {/* Avatar */}
-                <Avatar>
-                  <Avatar.Image
-                    referrerPolicy="no-referrer"
-                    alt={user?.name || "User"}
-                    src={user?.image}
-                  />
-
-                  <Avatar.Fallback>
-                    {user?.name
-                      ?.split(" ")
-                      .map((n) => n[0])
-                      .join("") || userInitial}
-                  </Avatar.Fallback>
-                </Avatar>
-
-                {/* Logout */}
+                {/* Avatar Button */}
                 <button
                   type="button"
-                  onClick={handleLogout}
-                  className="rounded-lg bg-red-500 px-3 py-2 text-sm font-semibold text-white transition hover:bg-red-600 xl:px-4"
+                  onClick={() => setProfileOpen((prev) => !prev)}
+                  aria-label="Open profile menu"
+                  className="rounded-full outline-none ring-blue-500 transition focus:ring-2"
                 >
-                  Logout
+                  <Avatar>
+                    <Avatar.Image
+                      referrerPolicy="no-referrer"
+                      alt={user?.name || "User"}
+                      src={user?.image}
+                    />
+
+                    <Avatar.Fallback>
+                      {user?.name
+                        ?.split(" ")
+                        .map((name) => name[0])
+                        .join("") || userInitial}
+                    </Avatar.Fallback>
+                  </Avatar>
                 </button>
+
+                {/* Profile Dropdown */}
+                {profileOpen && (
+                  <div className="absolute right-0 top-14 z-50 w-64 overflow-hidden rounded-xl border border-gray-200 bg-white shadow-xl dark:border-gray-700 dark:bg-gray-900">
+
+                 
+
+                    {/* Profile Link */}
+                    <Link
+                      href="#"
+                      onClick={() => setProfileOpen(false)}
+                      className="flex items-center gap-3 px-4 py-3 text-sm font-medium text-gray-700 transition hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800"
+                    >
+                      <FaUser className="text-blue-600" />
+                      Profile
+                    </Link>
+
+                    {/* Logout */}
+                    <button
+                      type="button"
+                      onClick={handleLogout}
+                      className="flex w-full items-center gap-3 px-4 py-3 text-left text-sm font-medium text-red-500 transition hover:bg-red-50 dark:hover:bg-red-950/30"
+                    >
+                      <FaRightFromBracket />
+                      Logout
+                    </button>
+                  </div>
+                )}
               </div>
             ) : (
-              <div className="flex items-center justify-center gap-2">
+              <div className="flex items-center gap-2">
 
-                {/* Login */}
                 <Link
                   href="/login"
                   onClick={closeMenu}
-                  className="rounded-lg border border-gray-200 px-3 py-2 text-center text-sm font-semibold text-gray-700 transition hover:bg-gray-100 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-gray-800 xl:px-4"
+                  className="rounded-lg border border-gray-200 px-3 py-2 text-sm font-semibold text-gray-700 transition hover:bg-gray-100 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-gray-800 xl:px-4"
                 >
                   Login
                 </Link>
 
-                {/* Register */}
                 <Link
                   href="/register"
                   onClick={closeMenu}
-                  className="rounded-lg bg-blue-600 px-3 py-2 text-center text-sm font-semibold text-white transition hover:bg-blue-700 xl:px-4"
+                  className="rounded-lg bg-blue-600 px-3 py-2 text-sm font-semibold text-white transition hover:bg-blue-700 xl:px-4"
                 >
                   Register
                 </Link>
+
               </div>
             )}
           </div>
 
-          {/* =========================
-              Mobile + Tablet Menu Button
-          ========================= */}
+          {/* Mobile Menu Button */}
           <button
             type="button"
-            onClick={() => setMenuOpen(!menuOpen)}
-            className="flex h-10 w-10 items-center justify-center rounded-lg border border-gray-200 text-gray-700 transition hover:bg-gray-100 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-gray-800 lg:hidden"
+            onClick={() => setMenuOpen((prev) => !prev)}
             aria-label="Toggle menu"
+            className="flex h-10 w-10 items-center justify-center rounded-lg border border-gray-200 text-gray-700 transition hover:bg-gray-100 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-gray-800 lg:hidden"
           >
             {menuOpen ? (
               <FaXmark size={20} />
@@ -250,12 +261,11 @@ export default function Navbar() {
               <FaBars size={20} />
             )}
           </button>
+
         </div>
       </div>
 
-      {/* =========================
-          Mobile + Tablet Menu
-      ========================= */}
+      {/* Mobile Menu */}
       {menuOpen && (
         <div className="border-t border-gray-200 bg-white px-4 py-5 dark:border-gray-800 dark:bg-gray-950 lg:hidden">
 
@@ -279,7 +289,7 @@ export default function Navbar() {
               Tutors
             </Link>
 
-            {/* Login Required Links */}
+            {/* Logged In Mobile Links */}
             {user && (
               <>
                 <Link
@@ -303,46 +313,57 @@ export default function Navbar() {
                   onClick={closeMenu}
                   className="rounded-lg px-3 py-3 font-medium text-gray-700 transition hover:bg-gray-100 hover:text-blue-600 dark:text-gray-300 dark:hover:bg-gray-800 dark:hover:text-blue-400"
                 >
-                  My Sessions
+                  My Booked Sessions
                 </Link>
-              </>
-            )}
 
-            {/* =========================
-                Mobile + Tablet Auth
-            ========================= */}
-            {user ? (
-              <div className="mt-3 flex items-center justify-center gap-3 border-t border-gray-200 pt-5 dark:border-gray-800">
+                {/* Mobile Profile */}
+                <Link
+                  href="#"
+                  onClick={closeMenu}
+                  className="mt-3 flex items-center gap-3 border-t border-gray-200 px-3 py-4 pt-5 dark:border-gray-800"
+                >
+                  <Avatar size="sm">
+                    <Avatar.Image
+                      referrerPolicy="no-referrer"
+                      alt={user?.name || "User"}
+                      src={user?.image}
+                    />
 
-                {/* Avatar */}
-                <Avatar>
-                  <Avatar.Image
-                    referrerPolicy="no-referrer"
-                    alt={user?.name || "User"}
-                    src={user?.image}
-                  />
+                    <Avatar.Fallback>
+                      {user?.name
+                        ?.split(" ")
+                        .map((name) => name[0])
+                        .join("") || userInitial}
+                    </Avatar.Fallback>
+                  </Avatar>
 
-                  <Avatar.Fallback>
-                    {user?.name
-                      ?.split(" ")
-                      .map((n) => n[0])
-                      .join("") || userInitial}
-                  </Avatar.Fallback>
-                </Avatar>
+                  <div>
+                    <p className="font-semibold text-gray-800 dark:text-white">
+                      {user?.name || "User"}
+                    </p>
 
-                {/* Logout */}
+                    <p className="text-xs text-gray-500 dark:text-gray-400">
+                      View Profile
+                    </p>
+                  </div>
+                </Link>
+
+                {/* Mobile Logout */}
                 <button
                   type="button"
                   onClick={handleLogout}
-                  className="rounded-lg bg-red-500 px-4 py-2 text-sm font-semibold text-white transition hover:bg-red-600"
+                  className="flex w-full items-center gap-3 rounded-lg px-3 py-3 text-left font-medium text-red-500 transition hover:bg-red-50 dark:hover:bg-red-950/30"
                 >
+                  <FaRightFromBracket />
                   Logout
                 </button>
-              </div>
-            ) : (
+              </>
+            )}
+
+            {/* Logged Out Mobile */}
+            {!user && (
               <div className="mt-3 flex gap-2 border-t border-gray-200 pt-5 dark:border-gray-800">
 
-                {/* Login */}
                 <Link
                   href="/login"
                   onClick={closeMenu}
@@ -351,7 +372,6 @@ export default function Navbar() {
                   Login
                 </Link>
 
-                {/* Register */}
                 <Link
                   href="/register"
                   onClick={closeMenu}
@@ -359,8 +379,10 @@ export default function Navbar() {
                 >
                   Register
                 </Link>
+
               </div>
             )}
+
           </div>
         </div>
       )}
