@@ -8,14 +8,17 @@ const TutorsPage = async () => {
     headers: await headers(),
   });
 
+  const user=session?.user
+  console.log(user, "user");
+
   // Fetch tutors
   const res = await fetch("http://localhost:5000/alltutors", {
     cache: "no-store",
   });
 
-  if (!res.ok) {
-    throw new Error("Failed to fetch tutors");
-  }
+  // if (!res.ok) {
+  //   throw new Error("Failed to fetch tutors");
+  // }
 
   const tutor = await res.json();
 
@@ -127,7 +130,7 @@ const TutorsPage = async () => {
                   {/* View Details */}
                   <Link
                     href={
-                      session
+                      user
                         ? `/tutors/${item._id}`
                         : `/login?redirect=/tutors/${item._id}`
                     }
