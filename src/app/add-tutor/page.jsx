@@ -37,14 +37,14 @@ const AddTutor = () => {
     const formData = new FormData(form);
 
     const tutorData = Object.fromEntries(formData.entries());
-
+tutorData.sessionStartDate = sessionStartDate.toISOString();
     const tutorsData={
       ...tutorData,
       userId:userId,
     }
     
 
-    // const {tutorName,totalSlot,teachingMode ,userid,subject,sessionStartDate,photo,location,institution,hourlyFee,experience,availableTime,availableDays,}= tutorData
+    
 
     if (!sessionStartDate) {
       toast.error("Please select a session start date.");
@@ -52,7 +52,7 @@ const AddTutor = () => {
       return;
     }
 
-    tutorData.sessionStartDate = sessionStartDate.toISOString();
+    
 
 
       const response = await fetch("http://localhost:5000/tutors", {

@@ -2,6 +2,9 @@
 import { headers } from "next/headers";
 import { auth } from "@/lib/auth";
 import { Table } from "@heroui/react";
+import TutorsModalDelete from "@/components/TutorsModalDelete";
+import TutorModalUpdate from "@/components/TutorModalUpdate";
+
 
 const MyTutorsPage = async () => {
   const tokenData = await auth.api.getToken({
@@ -12,7 +15,7 @@ const MyTutorsPage = async () => {
     headers: {
       Authorization: `Bearer ${tokenData.token}`,
     },
-    cache: "no-store",
+  
   });
 
   const tutors = await res.json();
@@ -21,18 +24,13 @@ const MyTutorsPage = async () => {
 
   return (
     <div className="container mx-auto px-4 py-10">
-      {/* <div className="mb-6">
-        <h1 className="text-2xl font-bold">My Tutors</h1>
-        <p className="mt-1 text-sm text-default-500">
-          Manage the tutors you have created.
-        </p>
-      </div> */}
+     
 
       {tutors.length === 0 ? (
         <div className="rounded-xl border border-default-200 p-10 text-center">
           <h2 className="text-xl font-semibold">No Tutors Found</h2>
           <p className="mt-2 text-default-500">
-            You haven't added any tutors yet.
+            You have not added any tutors yet.
           </p>
         </div>
       ) : (
@@ -62,7 +60,7 @@ const MyTutorsPage = async () => {
                         : tutor.availableDays}
                     </Table.Cell>
 
-                    <Table.Cell>৳{tutor.hourlyFee}</Table.Cell>
+                    <Table.Cell>${tutor.hourlyFee}</Table.Cell>
 
                     <Table.Cell>{tutor.location}</Table.Cell>
 
@@ -70,17 +68,9 @@ const MyTutorsPage = async () => {
 
                     <Table.Cell>
                       <div className="flex gap-2">
-                        <button
-                          className="rounded-md bg-blue-500 px-3 py-1.5 text-sm text-white hover:bg-blue-600"
-                        >
-                          Update
-                        </button>
+                    <TutorModalUpdate tutor={tutor} token ={tokenData.token}/>
 
-                        <button
-                          className="rounded-md bg-red-500 px-3 py-1.5 text-sm text-white hover:bg-red-600"
-                        >
-                          Delete
-                        </button>
+                      <TutorsModalDelete tutor={tutor} token={tokenData.token}/>
                       </div>
                     </Table.Cell>
                   </Table.Row>
