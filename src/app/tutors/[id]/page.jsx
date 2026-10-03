@@ -6,20 +6,30 @@ import Image from "next/image";
 const TutorsDetelsPage = async ({ params }) => {
   const { id } = await params;
 
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+  
+
+  // console.log(session?.user ,'session user email TutorsDetelsPage');
+  const user = session?.user;
   const tokenData =await auth.api.getToken({
     headers:await headers()
   })
 
 
-  console.log(tokenData, "data");
+ const token = tokenData?.token;
+ 
+
+  // console.log(token,'tokendata TutorsDetelsPage');
 
   const res = await fetch(`http://localhost:5000/alltutors/${id}`, {
     headers:{
-     authorization:`Bearer ${tokenData.token}`
+     authorization:`Bearer ${token}`
     }
   });
 
-  console.log(res, "resss");
+  // console.log(res, "resss");
 
   const tutor = await res.json();
 
@@ -154,7 +164,7 @@ const TutorsDetelsPage = async ({ params }) => {
 
             
               <div className="mt-6">
-              <BookingModal tutor={tutor}/>
+              <BookingModal tutor={tutor} user = {user} token ={token}/>
               </div>
 
             </div>

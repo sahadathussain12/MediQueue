@@ -3,7 +3,7 @@ import { headers } from "next/headers";
 import { auth } from "@/lib/auth";
 
 const TutorsPage = async () => {
-  // Check logged-in user
+  
   const session = await auth.api.getSession({
     headers: await headers(),
   });
@@ -16,9 +16,7 @@ const TutorsPage = async () => {
     cache: "no-store",
   });
 
-  // if (!res.ok) {
-  //   throw new Error("Failed to fetch tutors");
-  // }
+  
 
   const tutor = await res.json();
 
