@@ -12,7 +12,7 @@ const AvailableTutor = async () => {
 
 
   const res = await fetch("http://localhost:5000/tutors", {
-    cache: "no-store",
+   
   });
 
   const tutor = await res.json();

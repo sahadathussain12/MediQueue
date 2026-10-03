@@ -1,13 +1,6 @@
 "use client";
 
-import {
-  Button,
-  Input,
-  Label,
-  Modal,
-  Surface,
-  TextField,
-} from "@heroui/react";
+import { Button, Input, Label, Modal, Surface, TextField } from "@heroui/react";
 import { FaGraduationCap } from "react-icons/fa6";
 import { toast } from "react-toastify";
 
@@ -73,10 +66,7 @@ const BookingModal = ({ tutor, user, token }) => {
 
             <Modal.Body className="p-6">
               <Surface variant="default">
-                <form
-                  onSubmit={modalData}
-                  className="flex flex-col gap-4"
-                >
+                <form onSubmit={modalData} className="flex flex-col gap-4">
                   <TextField
                     className="w-full"
                     name="studentName"
@@ -136,10 +126,7 @@ const BookingModal = ({ tutor, user, token }) => {
                       Cancel
                     </Button>
 
-                    <Button
-                      type="submit"
-                      isDisabled={noSlot}
-                    >
+                    <Button type="submit" isDisabled={noSlot}>
                       {noSlot ? "Fully Booked" : "Confirm Booking"}
                     </Button>
                   </Modal.Footer>
