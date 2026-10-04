@@ -4,6 +4,11 @@ import { auth } from "@/lib/auth";
 import Image from "next/image";
 import SearchTutors from "@/components/SearchTutors";
 
+export const metadata = {
+  title:"Tutors || MediQueue",
+  description: "Find the perfect tutor and start your learning journey today.",
+}
+
 const TutorsPage = async ({ searchParams }) => {
   const session = await auth.api.getSession({
     headers: await headers(),

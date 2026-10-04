@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
+
 import {
   Button,
   Card,
@@ -33,7 +34,7 @@ const AddTutor = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Form element immediately save
+
     const form = e.currentTarget;
     const formData = new FormData(form);
 

@@ -7,16 +7,13 @@ export async function generateMetadata({ params }) {
   const { id } = await params;
 
   const res = await fetch(
-    `http://localhost:5000/alltutors/${id}`,
-    { cache: "no-store" }
+    `http://localhost:5000/tutor-metadata/${id}`
   );
 
   const tutor = await res.json();
 
-  console.log("METADATA:", tutor);
-
   return {
-    title: tutor?.tutorName || "Tutor",
+    title: `${tutor?.tutorName || "Tutor"} | MediQueue`,
   };
 }
 const TutorsDetelsPage = async ({ params }) => {
@@ -26,7 +23,7 @@ const TutorsDetelsPage = async ({ params }) => {
     headers: await headers(),
   });
 
-  // console.log(session?.user ,'session user email TutorsDetelsPage');
+
   const user = session?.user;
   const tokenData = await auth.api.getToken({
     headers: await headers(),
@@ -34,7 +31,7 @@ const TutorsDetelsPage = async ({ params }) => {
 
   const token = tokenData?.token;
 
-  // console.log(token,'tokendata TutorsDetelsPage');
+
 
   const res = await fetch(`http://localhost:5000/alltutors/${id}`, {
     headers: {
@@ -42,7 +39,7 @@ const TutorsDetelsPage = async ({ params }) => {
     },
   });
 
-  // console.log(res, "resss");
+
 
   const tutor = await res.json();
 
