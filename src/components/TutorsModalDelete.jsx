@@ -7,7 +7,7 @@ import { toast } from "react-toastify";
 const TutorsModalDelete = ({ tutor,token }) => {
  const handleDelete = async()=>{
    const res = await fetch(
-        `http://localhost:5000/delete-tutors/${tutor._id}`,
+        `${process.env.NEXT_PUBLIC_URI}/delete-tutors/${tutor._id}`,
         {
           method: "DELETE",
           headers: {

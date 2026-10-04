@@ -76,7 +76,7 @@ const AddTutor = () => {
 
       console.log("Tutor Data:", tutorsData);
 
-      const response = await fetch("http://localhost:5000/tutors", {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_URI}/tutors`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

@@ -11,7 +11,7 @@ const AvailableTutor = async () => {
 
   const user = session?.user;
 
-  const res = await fetch("http://localhost:5000/tutors", {});
+  const res = await fetch(`${process.env.NEXT_PUBLIC_URI}/tutors`, {});
 
   const tutor = await res.json();
 

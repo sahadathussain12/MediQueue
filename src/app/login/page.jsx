@@ -1,8 +1,7 @@
-
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { Suspense, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 
 import { FcGoogle } from "react-icons/fc";
@@ -21,13 +20,12 @@ import {
 import { authClient } from "@/lib/auth-clien";
 import { toast } from "react-toastify";
 
-export default function LoginPage() {
+function LoginForm() {
   const [showPassword, setShowPassword] = useState(false);
 
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  // User কোন page থেকে login করতে এসেছে
   const redirectUrl = searchParams.get("redirect") || "/";
 
   const onSubmit = async (e) => {
@@ -35,8 +33,6 @@ export default function LoginPage() {
 
     const formData = new FormData(e.currentTarget);
     const user = Object.fromEntries(formData.entries());
-
-    console.log(user, "user");
 
     const { data, error } = await authClient.signIn.email({
       email: user?.email,
@@ -53,15 +49,12 @@ export default function LoginPage() {
 
     toast.success("Sign In successful!");
 
-    // Login successful হলে আগের requested page-এ যাবে
     router.push(redirectUrl);
   };
 
   const handleGoogleSignIn = async () => {
     const { data, error } = await authClient.signIn.social({
       provider: "google",
-
-      // Google login successful হলে redirect URL-এ যাবে
       callbackURL: redirectUrl,
     });
 
@@ -79,7 +72,6 @@ export default function LoginPage() {
   return (
     <main className="flex min-h-[calc(100vh-80px)] items-center justify-center bg-gray-50 px-4 py-10 dark:bg-gray-950">
       <div className="w-full max-w-md">
-        {/* Heading */}
         <div className="mb-8 text-center">
           <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
             Welcome Back
@@ -90,10 +82,8 @@ export default function LoginPage() {
           </p>
         </div>
 
-        {/* Login Card */}
         <div className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-900 sm:p-8">
           <Form onSubmit={onSubmit} className="flex w-full flex-col gap-5">
-            {/* Email */}
             <TextField name="email" className="w-full">
               <Label>Email</Label>
 
@@ -105,11 +95,7 @@ export default function LoginPage() {
               <FieldError />
             </TextField>
 
-            {/* Password */}
-            <TextField
-              name="password"
-              className="w-full"
-            >
+            <TextField name="password" className="w-full">
               <Label>Password</Label>
 
               <div className="relative flex w-full items-center">
@@ -144,7 +130,6 @@ export default function LoginPage() {
               <FieldError />
             </TextField>
 
-            {/* Login Button */}
             <Button
               type="submit"
               variant="primary"
@@ -154,7 +139,6 @@ export default function LoginPage() {
             </Button>
           </Form>
 
-          {/* Divider */}
           <div className="my-5 flex items-center gap-3">
             <div className="h-px flex-1 bg-gray-200 dark:bg-gray-800" />
 
@@ -165,7 +149,6 @@ export default function LoginPage() {
             <div className="h-px flex-1 bg-gray-200 dark:bg-gray-800" />
           </div>
 
-          {/* Google Button */}
           <Button
             onClick={handleGoogleSignIn}
             type="button"
@@ -173,14 +156,11 @@ export default function LoginPage() {
             className="h-11 w-full font-semibold"
           >
             <FcGoogle className="text-xl" />
-
             Continue with Google
           </Button>
 
-          {/* Register Link */}
           <p className="mt-6 text-center text-sm text-gray-600 dark:text-gray-400">
             Don’t have an account?{" "}
-
             <Link
               href="/register"
               className="font-semibold text-blue-600 hover:underline dark:text-blue-400"
@@ -194,3 +174,10 @@ export default function LoginPage() {
   );
 }
 
+export default function LoginPage() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <LoginForm />
+    </Suspense>
+  );
+}

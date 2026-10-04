@@ -24,7 +24,7 @@ const endDate = params?.endDate || "";
 
 const query = `?search=${search}&startDate=${startDate}&endDate=${endDate}`;
 
-const res = await fetch(`http://localhost:5000/alltutors${query}`, {
+const res = await fetch(`${process.env.NEXT_PUBLIC_URI}/alltutors${query}`, {
   cache: "no-store",
 });
 

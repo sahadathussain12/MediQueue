@@ -5,7 +5,7 @@ import { toast } from "react-toastify";
 
 export function MyBookedSessionsUI({ bookings, token }) {
   const handleCancel = async (id) => {
-    const res = await fetch(`http://localhost:5000/cancel-booking/${id}`, {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_URI}/cancel-booking/${id}`, {
       method: "PATCH",
       headers: {
         Authorization: `Bearer ${token}`,

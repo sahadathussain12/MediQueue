@@ -15,7 +15,7 @@ const MyTutorsPage = async () => {
     headers: await headers(),
   });
 
-  const res = await fetch("http://localhost:5000/my-tutors", {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_URI}/my-tutors`, {
     headers: {
       Authorization: `Bearer ${tokenData.token}`,
     },

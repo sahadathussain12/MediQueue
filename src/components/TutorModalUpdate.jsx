@@ -24,7 +24,7 @@ const TutorModalUpdate = ({ tutor, token }) => {
     data.totalSlot = Number(data.totalSlot);
 
     const res = await fetch(
-      `http://localhost:5000/update-tutors/${tutor._id}`,
+      `${process.env.NEXT_PUBLIC_URI}/update-tutors/${tutor._id}`,
       {
         method: "PATCH",
         headers: {

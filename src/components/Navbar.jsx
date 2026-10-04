@@ -24,9 +24,7 @@ export default function Navbar() {
 
   const router = useRouter();
 
-  // =========================
-  // Auth Session
-  // =========================
+
   const { data: session } = authClient.useSession();
   const user = session?.user;
 

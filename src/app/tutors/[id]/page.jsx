@@ -7,7 +7,7 @@ export async function generateMetadata({ params }) {
   const { id } = await params;
 
   const res = await fetch(
-    `http://localhost:5000/tutor-metadata/${id}`
+    `${process.env.NEXT_PUBLIC_URI}/tutor-metadata/${id}`
   );
 
   const tutor = await res.json();
@@ -33,7 +33,7 @@ const TutorsDetelsPage = async ({ params }) => {
 
 
 
-  const res = await fetch(`http://localhost:5000/alltutors/${id}`, {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_URI}/alltutors/${id}`, {
     headers: {
       authorization: `Bearer ${token}`,
     },
